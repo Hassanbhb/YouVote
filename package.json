@@ -1,0 +1,25 @@
+{
+  "name": "you-vote",
+  "version": "1.0.0",
+  "description": "A voting app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hassanbhb/YouVote.git"
+  },
+  "author": "Hassan ben haj bouih",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hassanbhb/YouVote/issues"
+  },
+  "homepage": "https://github.com/Hassanbhb/YouVote#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "helmet": "^3.14.0",
+    "mongoose": "^5.3.3",
+    "volleyball": "^1.5.1"
+  }
+}

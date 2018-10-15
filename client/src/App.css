@@ -1,0 +1,26 @@
+.banner{
+    background-image: url(./assets/imgs/bg-img.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: aliceblue;
+    height: 90vh;
+    padding-top: 20vh;
+    padding-left: 3rem;
+}
+
+h1{
+    margin-top: 0;
+}
+
+.titles{
+    margin-bottom: 50px;
+}
+
+section{
+    margin-top: 10px;
+}
+
+h1.collection-header{
+    margin-bottom: 0;
+}
