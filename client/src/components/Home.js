@@ -19,7 +19,7 @@ function Home() {
           <div className="col s12 m4 center">
             <div className="card white-grey ">
               <div className="card-content black-text">
-                <i class="fas fa-gamepad fa-5x"></i>
+                <i className="fas fa-gamepad fa-5x"></i>
                 <span className="card-title">Easy To use</span>
                 <p>We have provided i very simple interface, to help our users create their charts faster and easier. We are also always open to feedback and can answer any questions a user may have.</p>
               </div> 
@@ -28,7 +28,7 @@ function Home() {
           <div className="col s12 m4 center">
             <div className="card white-grey ">
               <div className="card-content black-text">
-                <i class="fas fa-bolt fa-5x"></i>
+                <i className="fas fa-bolt fa-5x"></i>
                 <span className="card-title">Fast!</span>
                 <p>No delay, No payment, Fast and reliable. We did most of the heavy lifting, all you have to do is pick you chart and options, and BOOM!! you chart is ready.</p>
               </div> 
@@ -37,7 +37,7 @@ function Home() {
           <div className="col s12 m4 center">
             <div className="card white-grey ">
               <div className="card-content black-text">
-                <i class="fas fa-share-alt fa-5x"></i>
+                <i className="fas fa-share-alt fa-5x"></i>
                 <span className="card-title">Sharing</span>
                 <p>What is the use of a poll if you cant Share it with people?, That is why we provide our users with methods to share their polls on big platforms like Facebook and twitter.</p>
               </div> 
@@ -59,9 +59,9 @@ function Home() {
               <div className="col l4 offset-l2 s12">
                 <h5 className="white-text">More about me</h5>
                 <ul>
-                  <li><a class="grey-text text-lighten-3" href="#!"><i class="fas fa-file"></i> Portfolio</a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!"><i class="fab fa-github"></i> Github</a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!"><i class="fab fa-twitter"></i> Twitter</a></li>
+                  <li><a className="grey-text text-lighten-3" href="#!"><i className="fas fa-file"></i> Portfolio</a></li>
+                  <li><a className="grey-text text-lighten-3" href="#!"><i className="fab fa-github"></i> Github</a></li>
+                  <li><a className="grey-text text-lighten-3" href="#!"><i className="fab fa-twitter"></i> Twitter</a></li>
                 </ul>
               </div>
             </div>
