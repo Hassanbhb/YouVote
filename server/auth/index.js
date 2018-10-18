@@ -32,6 +32,7 @@ router.post('/signup', (req, res, next)=>{
                 if(user){
                     //respond with error
                     const err = new Error('username already taken, try another one')
+                    res.status(409);
                     next(err);
                 }else{ // else it's unique
                     //hash the password
@@ -46,9 +47,10 @@ router.post('/signup', (req, res, next)=>{
                             // save to db
                             newUser.save().then(user => {
                                 res.json({
-                                    message: 'successful sign up'
+                                    user
                                 })
                             }).catch(err => {
+                                res.status(500)
                                 next(new Error('something went wrong'))
                             })
                         })
@@ -58,6 +60,7 @@ router.post('/signup', (req, res, next)=>{
             })
     }else{
         //send error
+        res.status(400)
         next(result.error)
     }
     
@@ -84,7 +87,7 @@ router.post('/login', (req, res, next) => {
                             expiresIn: '1d'
                         }, (err, token) => {
                             if(err){
-                                respondError422(res, next)
+                                next(err);
                             }else{
                                 res.json({
                                     token
@@ -93,13 +96,13 @@ router.post('/login', (req, res, next) => {
                         })
                     }else{
 						res.json({
-							'error': 'wrong user name and password'
-						})
+                            message: 'wrong username or password'
+                        })
 					}
                 }else{
 					//if not found send error
                     res.json({
-                        'error': 'wrong user name and password'
+                        message: 'wrong username or password'
                     })
                 }
             })
