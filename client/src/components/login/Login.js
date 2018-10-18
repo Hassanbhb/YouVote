@@ -24,10 +24,7 @@ class Login extends Component {
       }
     })
     .then(res => res.json())
-    .then(result => {
-      console.log(result)
-      this.props.history.push('/dashbord')
-    })
+    .then(result => this.props.history.push('/dashbord'))
     .catch(err => console.log(err));
   }
   render() {
