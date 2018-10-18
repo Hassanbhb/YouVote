@@ -105,23 +105,23 @@ class SignUp extends Component {
                 </div>
               </div>
             </div>
-            <form onSubmit={this.submit} className="col s12 ">
+            <form onSubmit={this.submit} className="col s12 m6 offset-m3">
               <h1>Sign Up</h1>
               <div className="row">
-                <div className="input-field col s12 m6">
+                <div className="input-field col s12">
                   <input id="user_name" type="text" name='username' onChange={this.getInput} required/>
                   <label htmlFor="user_name">Username</label>
                   <span className="helper-text">Only numbers and letters</span>
                 </div>
               </div>
               <div className="row">
-                <div className="input-field col s12 m6">
+                <div className="input-field col s12">
                   <input id="user_email" type="email" name="email" onChange={this.getInput} required/>
                   <label htmlFor="user_email">Email</label>
                 </div>
               </div>
               <div className="row">
-                <div className="input-field col s12 m6">
+                <div className="input-field col s12">
                   <input id="user_password" type="password" name="password" onChange={this.getInput} required/>
                   <label htmlFor="user_password">Password</label>
                   <span className="helper-text">Must be 12 characters, letters and numbers</span>
