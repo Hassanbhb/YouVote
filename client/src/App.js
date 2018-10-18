@@ -6,6 +6,8 @@ import Dashbord from './components/dashbord/Dashbord'
 import NewPoll from './components/newPoll/NewPoll'
 import Login from './components/login/Login'
 import Signup from './components/signup/SignUp'
+import { ToastContainer } from 'react-toastify'//for alerts
+import 'react-toastify/dist/ReactToastify.min.css'
 import './App.css';
 
 class App extends Component {
@@ -21,6 +23,7 @@ class App extends Component {
             <Route path='/login' component={Login}/>
             <Route path='/signup' component={Signup}/>
           </Switch>
+          <ToastContainer />
         </div> 
       </BrowserRouter>
       
