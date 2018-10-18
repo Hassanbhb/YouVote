@@ -8,33 +8,37 @@ const router = express.Router();
 
 const schema = Joi.object().keys({
     username: Joi.string().alphanum().min(3).max(30).required(),
-    email: Joi.string().email({ minDomainAtoms: 2 }),
+    email: Joi.string().email({
+        minDomainAtoms: 2
+    }),
     password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required()
     // - at least 12 characters
     // - can contain letters or numbers
 })
 
-router.get('/', (req, res)=>{
+router.get('/', (req, res) => {
 
     res.send({
         message: 'hello router'
     })
 })
 
-router.post('/signup', (req, res, next)=>{
-    
+router.post('/signup', (req, res, next) => {
+
     const result = Joi.validate(req.body, schema)
-    if(result.error === null){
+    if (result.error === null) {
         //make sure username is unique
-        Users.findOne({username: req.body.username})
-            .then( user => {
+        Users.findOne({
+                username: req.body.username
+            })
+            .then(user => {
                 //if user exists then username is a duplicate
-                if(user){
+                if (user) {
                     //respond with error
                     const err = new Error('username already taken, try another one')
                     res.status(409);
                     next(err);
-                }else{ // else it's unique
+                } else { // else it's unique
                     //hash the password
                     bcrypt.genSalt(12, (err, salt) => {
                         bcrypt.hash(req.body.password, salt, (err, hash) => {
@@ -56,60 +60,65 @@ router.post('/signup', (req, res, next)=>{
                         })
                     })
                 }
-                
+
             })
-    }else{
+    } else {
         //send error
         res.status(400)
         next(result.error)
     }
-    
+
 })
 
 router.post('/login', (req, res, next) => {
 
-    const result = Joi.validate({ username: req.body.username, password: req.body.password}, schema)
-	if(result.error === null){
-		//search this username
-        Users.findOne({username: req.body.username})
+    const result = Joi.validate({
+        username: req.body.username,
+        password: req.body.password
+    }, schema)
+    if (result.error === null) {
+        //search this username
+        Users.findOne({
+                username: req.body.username
+            })
             .then(user => {
-				//if found
-                if(user){
-					// compare the passwords
-                    if(bcrypt.compare(req.body.password, user.password)){
+                //if found
+                if (user) {
+                    // compare the passwords
+                    if (bcrypt.compare(req.body.password, user.password)) {
                         //if they match then create a payload and use to generate the token
                         const payload = {
-							_id: user._id,
-							username: user.username
+                            _id: user._id,
+                            username: user.username
                         }
                         //generate token
                         jwt.sign(payload, process.env.TOKEN_SECRET, {
                             expiresIn: '1d'
                         }, (err, token) => {
-                            if(err){
+                            if (err) {
                                 next(err);
-                            }else{
+                            } else {
                                 res.json({
                                     token
                                 })
                             }
                         })
-                    }else{
-						res.json({
+                    } else {
+                        res.json({
                             message: 'wrong username or password'
                         })
-					}
-                }else{
-					//if not found send error
+                    }
+                } else {
+                    //if not found send error
                     res.json({
                         message: 'wrong username or password'
                     })
                 }
             })
-    }else{
-		next(result.error);
-	}
-    
+    } else {
+        next(result.error);
+    }
+
 })
 
 module.exports = router;
