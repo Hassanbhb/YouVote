@@ -24,7 +24,10 @@ class Login extends Component {
       }
     })
     .then(res => res.json())
-    .then(result => this.props.history.push('/dashbord'))
+    .then(result => {
+      console.log(result)
+      this.props.history.push('/dashbord')
+    })
     .catch(err => console.log(err));
   }
   render() {
@@ -36,7 +39,7 @@ class Login extends Component {
               <div className="row">
                 <div className="input-field col s12 m6">
                   <input id="user_name" type="text" name="username" onChange={this.getInput} required/>
-                  <label htmlFor="user_name">User Name</label>
+                  <label htmlFor="user_name">Username</label>
                 </div>
               </div>
               <div className="row">
