@@ -2,19 +2,33 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import Joi from 'joi'
 import { toast } from 'react-toastify'//alerts
+import Loading from '../Loading'
 
 
 class SignUp extends Component {
 
   state = {
-    username: '',
-    email: '',
-    password: ''
+    signingUp: true,
+    user:{
+      username: '',
+      email: '',
+      password: ''
+    }
+  }
+
+  //if client is logged in send him to dashbord
+  componentDidMount(){
+    if(localStorage.token){
+      this.props.history.push('/dashbord')
+    }
   }
 
   getInput = (e) =>{
     this.setState({
-      [e.target.name]: e.target.value
+      user:{
+        ...this.state.user,
+        [e.target.name]: e.target.value
+      }
     })
   }
 
@@ -26,25 +40,33 @@ class SignUp extends Component {
       //send to server
       fetch("http://localhost:8080/auth/signup", {
         method: "POST",
-        body: JSON.stringify(this.state),
+        body: JSON.stringify(this.state.user),
         headers: {
           "Content-Type": "application/json"
         }
       })
         .then(res => {
           if(res.ok){
-            return res.json()
+            return res.json();
           }
           //if res is not 200
           return res.json().then(err => {
             throw new Error(err.message)
           })
-        }).then(() => {
+        }).then((response) => {
+          //change the state to display the loader  
+          this.setState({
+            signingUp: false
+          })
+          localStorage.token = response.token;
           toast.success('success: Welcome !', {
             position: toast.POSITION.BOTTOM_RIGHT,
             autoClose: 1500
           });
-          this.props.history.push('/dashbord')
+          //wait 800 milliseconds then redirect
+          setTimeout(() => {
+            this.props.history.push('/dashbord')
+          }, 1000);
         })
         .catch(err => {
           //if err (username is a duplicate)
@@ -65,7 +87,7 @@ class SignUp extends Component {
       password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required()
     })
     //check if the state is valid
-    const result = Joi.validate(this.state, schema);
+    const result = Joi.validate(this.state.user, schema);
     if(result.error === null){
       //if yes then retur true
       return true
@@ -91,49 +113,37 @@ class SignUp extends Component {
   render() {
     return (
       <React.Fragment>
-        
-          <div className="container">
-          <div className='row center-align'>
-            <div className="preloader-wrapper active big">
-              <div className="spinner-layer spinner-blue-only">
-                <div className="circle-clipper left">
-                  <div className="circle"></div>
-                </div><div className="gap-patch">
-                  <div className="circle"></div>
-                </div><div className="circle-clipper right">
-                  <div className="circle"></div>
+          <div className="container center-align active row">
+            
+            { this.state.signingUp ? 
+            
+              <form onSubmit={this.submit} className="col s12 m6 offset-m3">
+                <h1>Sign Up</h1>
+                <div className="row">
+                  <div className="input-field col s12">
+                    <input id="user_name" type="text" name='username' onChange={this.getInput} required/>
+                    <label htmlFor="user_name">Username</label>
+                    <span className="helper-text">Only numbers and letters</span>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <form onSubmit={this.submit} className="col s12 m6 offset-m3">
-              <h1>Sign Up</h1>
-              <div className="row">
-                <div className="input-field col s12">
-                  <input id="user_name" type="text" name='username' onChange={this.getInput} required/>
-                  <label htmlFor="user_name">Username</label>
-                  <span className="helper-text">Only numbers and letters</span>
+                <div className="row">
+                  <div className="input-field col s12">
+                    <input id="user_email" type="email" name="email" onChange={this.getInput} required/>
+                    <label htmlFor="user_email">Email</label>
+                  </div>
                 </div>
-              </div>
-              <div className="row">
-                <div className="input-field col s12">
-                  <input id="user_email" type="email" name="email" onChange={this.getInput} required/>
-                  <label htmlFor="user_email">Email</label>
+                <div className="row">
+                  <div className="input-field col s12">
+                    <input id="user_password" type="password" name="password" onChange={this.getInput} required/>
+                    <label htmlFor="user_password">Password</label>
+                    <span className="helper-text">Must be 12 characters, letters and numbers</span>
+                  </div>
                 </div>
-              </div>
-              <div className="row">
-                <div className="input-field col s12">
-                  <input id="user_password" type="password" name="password" onChange={this.getInput} required/>
-                  <label htmlFor="user_password">Password</label>
-                  <span className="helper-text">Must be 12 characters, letters and numbers</span>
-                </div>
-              </div>  
-
-              <button className="btn waves-effect waves-light" type="submit" name="action">Submit</button>
-
-            </form>
-          </div>
-        </div>  
-        </React.Fragment>
+                <button className="btn waves-effect waves-light" type="submit" name="action">Submit</button>
+              </form> : <Loading />
+              }
+          </div>  
+      </React.Fragment>
     )
   }
 }
