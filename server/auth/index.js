@@ -16,6 +16,26 @@ const schema = Joi.object().keys({
     // - can contain letters or numbers
 })
 
+const createTokenSendResponse = (user, res, next) => {
+     //if they match then create a payload and use to generate the token
+     const payload = {
+        _id: user._id,
+        username: user.username
+    }
+    //generate token
+    jwt.sign(payload, process.env.TOKEN_SECRET, {
+        expiresIn: '1d'
+    }, (err, token) => {
+        if (err) {
+            next(err);
+        } else {
+            res.json({
+                token
+            })
+        }
+    })
+}
+
 router.get('/', (req, res) => {
 
     res.send({
@@ -24,7 +44,6 @@ router.get('/', (req, res) => {
 })
 
 router.post('/signup', (req, res, next) => {
-
     const result = Joi.validate(req.body, schema)
     if (result.error === null) {
         //make sure username is unique
@@ -50,9 +69,9 @@ router.post('/signup', (req, res, next) => {
                             })
                             // save to db
                             newUser.save().then(user => {
-                                res.json({
-                                    user
-                                })
+                                
+                                createTokenSendResponse(user, res, next);
+
                             }).catch(err => {
                                 res.status(500)
                                 next(new Error('something went wrong'))
@@ -76,6 +95,7 @@ router.post('/login', (req, res, next) => {
         username: req.body.username,
         password: req.body.password
     }, schema)
+
     if (result.error === null) {
         //search this username
         Users.findOne({
@@ -86,37 +106,22 @@ router.post('/login', (req, res, next) => {
                 if (user) {
                     // compare the passwords
                     if (bcrypt.compare(req.body.password, user.password)) {
-                        //if they match then create a payload and use to generate the token
-                        const payload = {
-                            _id: user._id,
-                            username: user.username
-                        }
-                        //generate token
-                        jwt.sign(payload, process.env.TOKEN_SECRET, {
-                            expiresIn: '1d'
-                        }, (err, token) => {
-                            if (err) {
-                                next(err);
-                            } else {
-                                res.json({
-                                    token
-                                })
-                            }
-                        })
+                       
+                        createTokenSendResponse(user, res, next);
+
                     } else {
-                        res.json({
-                            message: 'wrong username or password'
-                        })
+                        res.status(401)
+                        next(new Error('Invalid password !'))
                     }
                 } else {
                     //if not found send error
-                    res.json({
-                        message: 'wrong username or password'
-                    })
+                    res.status(401)
+                    next(new Error('Invalid username !'))
                 }
             })
     } else {
-        next(result.error);
+        res.status(401)
+        next(new Error('Invalid username or password !'))
     }
 
 })

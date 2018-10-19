@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const volleyball =  require('volleyball');
 const cors = require('cors');
+const middlewares = require('./auth/middlewares')
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.use(volleyball);
 app.use(express.json());
 app.use(cors());
 require('dotenv').config()
+app.use(middlewares.checkTokenSetUser);
+
 //connect to database
 mongoose.connect('mongodb+srv://hassan:1A2Z3E4R5T@youvote-nqxqi.gcp.mongodb.net/YouVote?retryWrites=true', { useNewUrlParser: true })
     .then(() => console.log('db connected ...'))
@@ -25,8 +28,10 @@ mongoose.connect('mongodb+srv://hassan:1A2Z3E4R5T@youvote-nqxqi.gcp.mongodb.net/
 
 
 app.get('/', (req, res) => {
+    console.log(req.user)
     res.json({
-        message: 'Welcome to server'
+        message: 'Welcome to server',
+        user: req.user
     })
 })
 
