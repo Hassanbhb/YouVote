@@ -6,7 +6,7 @@ function Navbar (){
     return (
       <div>
         <nav>
-          {/* the navs materialize initialization is in public/index.html */}
+          {/* the movile navs materialize initialization is in public/index.html */}
           <div className="nav-wrapper blue lighten-3">
             <Link to="/" className="brand-logo">YouVote</Link>
             <a href="#!" data-target="mobile-demo" className="sidenav-trigger right"><i className="fas fa-bars"></i></a>
