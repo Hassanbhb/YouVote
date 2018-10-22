@@ -1,31 +1,67 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import SignedInLinks from './SignedInLinks'
-import SignedOutLinks from './SignedOutLinks'
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import SignedInLinks from "./SignedInLinks";
+import SignedOutLinks from "./SignedOutLinks";
+import { logoutUser } from "../../store/actions/userActions";
 
-function Navbar (){
+class Navbar extends Component {
+  logout = () => {
+    delete localStorage.token;
+    this.props.logoutUser(this.props.user);
+  };
 
+  render() {
+    const links = this.props.isAuthenticated ? (
+      <SignedInLinks logout={this.logout} />
+    ) : (
+      <SignedOutLinks />
+    );
     return (
       <div>
         <nav>
-          {/* the movile navs materialize initialization is in public/index.html */}
           <div className="nav-wrapper blue lighten-3">
-            <Link to="/" className="brand-logo">YouVote</Link>
-            <a href="#!" data-target="mobile-demo" className="sidenav-trigger right"><i className="fas fa-bars"></i></a>
+            <Link to="/" className="brand-logo">
+              YouVote
+            </Link>
+            <a
+              href="#!"
+              data-target="mobile-demo"
+              className="sidenav-trigger right"
+            >
+              <i className="fas fa-bars" />
+            </a>
             <ul id="nav-mobile" className="right hide-on-med-and-down">
-              <SignedInLinks />
-              <SignedOutLinks />
+              {links}
             </ul>
           </div>
         </nav>
-  
+
         <ul className="sidenav" id="mobile-demo">
-          <SignedInLinks />
-          <SignedOutLinks />
+          {links}
         </ul>
       </div>
-      
-    ) 
+    );
+  }
 }
 
-export default Navbar;
+const mapStateToProps = state => {
+  console.log(state);
+  return {
+    isAuthenticated: state.auth.isAuthenticated,
+    user: state.user
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    logoutUser: user => {
+      dispatch(logoutUser(user));
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Navbar);
