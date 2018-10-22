@@ -1,8 +1,10 @@
 export const createUser = user => {
   return (dispatch, getState) => {
     //make async Call to db
+    localStorage.token = user.token;
     dispatch({
       type: "CREATE_USER",
+      isAuthenticated: true,
       user
     });
   };
@@ -10,17 +12,21 @@ export const createUser = user => {
 
 export const loginUser = user => {
   return (dispatch, getState) => {
+    localStorage.token = user.token;
     dispatch({
       type: "LOGIN_USER",
+      isAuthenticated: true,
       user
     });
   };
 };
 
-export const deleteUser = user => {
+export const logoutUser = user => {
   return (dispatch, getState) => {
+    delete localStorage.token;
     dispatch({
-      type: "DELETE_USER",
+      type: "LOGOUT_USER",
+      isAuthenticated: false,
       user
     });
   };

@@ -1,4 +1,5 @@
 const initState = {
+  isAuthenticated: false,
   user: {}
 };
 
@@ -7,16 +8,19 @@ const authReducer = (state = initState, action) => {
     case "CREATE_USER":
       return {
         ...state,
+        isAuthenticated: action.isAuthenticated,
         user: { ...action.user }
       };
     case "LOGIN_USER":
       return {
         ...state,
+        isAuthenticated: action.isAuthenticated,
         user: { ...action.user }
       };
-    case "DELETE_USER":
+    case "LOGOUT_USER":
       return {
         ...state,
+        isAuthenticated: action.isAuthenticated,
         user: {}
       };
     default:
