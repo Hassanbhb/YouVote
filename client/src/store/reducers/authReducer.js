@@ -9,6 +9,16 @@ const authReducer = (state = initState, action) => {
         ...state,
         user: { ...action.user }
       };
+    case "LOGIN_USER":
+      return {
+        ...state,
+        user: { ...action.user }
+      };
+    case "DELETE_USER":
+      return {
+        ...state,
+        user: {}
+      };
     default:
       return state;
   }

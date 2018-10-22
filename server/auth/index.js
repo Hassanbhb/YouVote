@@ -40,6 +40,8 @@ const createTokenSendResponse = (user, res, next) => {
         next(err);
       } else {
         res.json({
+          id: user._id,
+          username: user.username,
           token
         });
       }
@@ -115,16 +117,19 @@ router.post("/login", (req, res, next) => {
       //if found
       if (user) {
         // compare the passwords
-        if (bcrypt.compare(req.body.password, user.password)) {
-          createTokenSendResponse(user, res, next);
-        } else {
-          res.status(401);
-          next(new Error("Invalid password !"));
-        }
+        bcrypt.compare(req.body.password, user.password).then(result => {
+          //if match
+          if (result) {
+            createTokenSendResponse(user, res, next);
+          } else {
+            res.status(401);
+            next(new Error("Invalid password or username !!"));
+          }
+        });
       } else {
         //if not found send error
         res.status(401);
-        next(new Error("Invalid username !"));
+        next(new Error("Username does not exist !"));
       }
     });
   } else {

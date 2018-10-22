@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import Joi from "joi";
 import { toast } from "react-toastify";
+import { connect } from "react-redux";
 import Loading from "../Loading";
-import loginUser from "../../services/authService";
+import { loginUser } from "../../store/actions/userActions";
+import userLogin from "../../services/authService";
 
 class Login extends Component {
   state = {
@@ -27,8 +29,18 @@ class Login extends Component {
     e.preventDefault();
 
     if (this.validate()) {
-      loginUser("POST", "auth/login", this.state.user).then(response => {
-        console.log(response);
+      userLogin("POST", "auth/login", this.state.user).then(response => {
+        if (response.token) {
+          this.props.loginUser(response);
+          toast.success("Welcome back!", {
+            position: toast.POSITION.BOTTOM_RIGHT
+          });
+          this.props.history.push("/dashbord");
+        } else {
+          toast.error("Error: invalid username or password!", {
+            position: toast.POSITION.BOTTOM_RIGHT
+          });
+        }
       });
     }
   };
@@ -117,4 +129,15 @@ class Login extends Component {
   }
 }
 
-export default withRouter(Login);
+const mapDispatchToProps = dispatch => {
+  return {
+    loginUser: user => {
+      dispatch(loginUser(user));
+    }
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(withRouter(Login));
