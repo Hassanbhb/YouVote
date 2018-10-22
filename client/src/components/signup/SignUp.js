@@ -150,12 +150,6 @@ class SignUp extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    user: state.user
-  };
-};
-
 const mapDispatchToProps = dispatch => {
   return {
     createUser: user => {
@@ -165,6 +159,6 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(withRouter(SignUp));
