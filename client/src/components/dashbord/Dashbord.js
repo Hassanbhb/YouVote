@@ -11,6 +11,7 @@ class Dashbord extends Component {
       console.log(user);
     }
   }
+
   render() {
     const { user } = this.props;
     return (
