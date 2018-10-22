@@ -10,31 +10,6 @@ class Dashbord extends Component {
     } else {
       console.log(user);
     }
-    //   fetch("http://localhost:8080/", {
-    //     headers: {
-    //       authorization: "Bearer " + localStorage.token
-    //     }
-    //   })
-    //     .then(res => res.json())
-    //     .then(result => {
-    //       console.log(result);
-    //       if (result.user) {
-    //         this.setState({
-    //           user: {
-    //             ...result.user
-    //           }
-    //         });
-    //       } else {
-    //         localStorage.removeItem("token");
-    //         this.props.history.push("/login");
-    //       }
-    //     })
-    //     .catch(err => console.log(err));
-    //   // if(localStorage.token){
-    //   //   this.props.history.push('/dashbord')
-    //   // }else{
-    //   //   this.props.history.push('/login')
-    //   // }
   }
   render() {
     const { user } = this.props;
