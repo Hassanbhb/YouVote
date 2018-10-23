@@ -6,7 +6,6 @@ const checkTokenSetUser = (req, res, next) => {
   //if it exists
   if (authHeader) {
     const token = authHeader.split(" ")[1];
-    console.log(token);
     if (token) {
       //check if it's valid token
       jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
@@ -23,6 +22,17 @@ const checkTokenSetUser = (req, res, next) => {
   }
 };
 
+const isLoggedIn = (req, res, next) => {
+  if (req.user) {
+    next();
+  } else {
+    const error = new Error("🚫Un-Authorized🚫");
+    res.status(403);
+    next(error);
+  }
+};
+
 module.exports = {
-  checkTokenSetUser
+  checkTokenSetUser,
+  isLoggedIn
 };
