@@ -11,6 +11,7 @@ const app = express();
 
 //auth routes
 const auth = require("./auth/index");
+const polls = require("./polls/polls-api");
 
 //use middlewares
 app.use(helmet());
@@ -39,6 +40,7 @@ app.get("/", (req, res) => {
 
 //use routes
 app.use("/auth", auth);
+app.use("/polls", middlewares.isLoggedIn, polls);
 
 //error handlers
 function notFound(req, res, next) {
