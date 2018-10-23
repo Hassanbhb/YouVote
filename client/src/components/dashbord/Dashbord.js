@@ -4,11 +4,11 @@ import { connect } from "react-redux";
 
 class Dashbord extends Component {
   componentDidMount() {
-    const { user } = this.props;
-    if (Object.keys(user).length === 0) {
+    const { isAuthenticated } = this.props;
+    if (!isAuthenticated) {
       this.props.history.push("/login");
     } else {
-      console.log(user);
+      console.log(this.props.user);
     }
   }
 

@@ -7,7 +7,6 @@ import { logoutUser } from "../../store/actions/userActions";
 
 class Navbar extends Component {
   logout = () => {
-    delete localStorage.token;
     this.props.logoutUser(this.props.user);
   };
 
@@ -46,7 +45,6 @@ class Navbar extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state);
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.user

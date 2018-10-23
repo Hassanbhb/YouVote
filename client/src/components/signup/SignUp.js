@@ -34,10 +34,15 @@ class SignUp extends Component {
       saveUser("POST", "auth/signup", this.state.user).then(response => {
         if (response.token) {
           this.props.createUser(response);
+          this.setState({
+            signingUp: false
+          });
           toast.success("Welcome!", {
             position: toast.POSITION.BOTTOM_RIGHT
           });
-          this.props.history.push("/dashbord");
+          setTimeout(() => {
+            this.props.history.push("/dashbord");
+          }, 1000);
         } else {
           toast.error("Error: invalid username or password!", {
             position: toast.POSITION.BOTTOM_RIGHT
