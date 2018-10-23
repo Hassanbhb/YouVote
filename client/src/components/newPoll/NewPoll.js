@@ -3,6 +3,16 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 class NewPoll extends Component {
+  state = {
+    options: [{ option: "" }],
+    chart: {
+      title: "",
+      labels: [],
+      data: [],
+      voters: [],
+      creator: ""
+    }
+  };
   componentDidMount() {
     const { isAuthenticated } = this.props;
     if (!isAuthenticated) {
@@ -13,28 +23,30 @@ class NewPoll extends Component {
   }
 
   createOption = e => {
-    const options = document.getElementById("options");
-    if (options.children.length === 10) {
-      alert("you are only allowed to 10 options per chart");
+    if (this.state.options.length === 10) {
+      alert("max options 10");
     } else {
-      //create div element
-      const div = document.createElement("div");
-      div.setAttribute("class", "input-field col s6 m6");
-      //create input
-      const input = document.createElement("input");
-      input.setAttribute("id", "option");
-      input.setAttribute("type", "text");
-      //create label
-      const label = document.createElement("label");
-      const textNode = document.createTextNode("option");
-      label.setAttribute("for", "option");
-      label.appendChild(textNode);
-      //append input and label to div
-      div.appendChild(input);
-      div.appendChild(label);
-      //append div to options div
-      options.appendChild(div);
+      this.setState(prevState => ({
+        options: [...prevState.options, { option: "" }]
+      }));
     }
+  };
+
+  getInput = e => {
+    if (["option"].includes(e.target.className)) {
+      let options = [...this.state.options];
+      options[e.target.dataset.id][e.target.className] = e.target.value;
+      this.setState({ options }, () => console.log(this.state.options));
+    } else {
+      this.setState({
+        [e.target.name]: e.target.value
+      });
+    }
+  };
+
+  submit = e => {
+    e.preventDefault();
+    console.log(this.state);
   };
 
   render() {
@@ -45,20 +57,34 @@ class NewPoll extends Component {
             <h1>Create new Chart</h1>
             <div className="row">
               <div className="input-field offset-m3 col s12 m6">
-                <input id="chart_title" type="text" required />
+                <input
+                  id="chart_title"
+                  type="text"
+                  name="title"
+                  onChange={this.getInput}
+                  required
+                />
                 <label htmlFor="chart_title">Title</label>
               </div>
             </div>
 
             <div id="options" className="row">
-              <div className="input-field col s6 m6">
-                <input id="option" type="text" />
-                <label htmlFor="option">option</label>
-              </div>
-              <div className="input-field col s6 m6">
-                <input id="option" type="text" />
-                <label htmlFor="option">option</label>
-              </div>
+              {this.state.options.map((option, idx) => {
+                return (
+                  <div className="input-field col s6 m6" key={idx}>
+                    <input
+                      id={`option-${idx}`}
+                      type="text"
+                      data-id={idx}
+                      name={`option-${idx}`}
+                      onChange={this.getInput}
+                      className="option"
+                    />
+                    <label htmlFor={`option-${idx}`}>{`option #${idx +
+                      1}`}</label>
+                  </div>
+                );
+              })}
             </div>
 
             <div className="col s12 m12">
