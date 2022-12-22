@@ -22,7 +22,7 @@
     "express": "^4.16.4",
     "helmet": "^3.14.0",
     "joi": "^14.0.0",
-    "jsonwebtoken": "^8.3.0",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^5.7.5",
     "volleyball": "^1.5.1"
   }
